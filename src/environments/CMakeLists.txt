@@ -19,6 +19,7 @@ set(SOURCES
     libmypaint_wrapper/surface.cc)
 
 pybind11_add_module(pylibmypaint ${SOURCES})
+
 add_dependencies(pylibmypaint libmypaint)
 
 target_include_directories(pylibmypaint PUBLIC ${PROJECT_SOURCE_DIR})
@@ -30,8 +31,9 @@ target_link_libraries(
 
 #cmake.txt
 
-add_custom_target(
-    pyconfig
-    ALL
-    COMMAND ${CMAKE_COMMAND} -E copy ${PROTO_PY} ${PROJECT_SOURCE_DIR}/src/environments
-    DEPENDS ${PROTO_PY})
+
+#add_custom_target(
+#    pyconfig
+#    ALL
+#    COMMAND ${CMAKE_COMMAND} -E copy ${PROTO_PY} ${PROJECT_SOURCE_DIR}/src/environments
+#    DEPENDS ${PROTO_PY})

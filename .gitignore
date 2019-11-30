@@ -2,3 +2,5 @@
 /build/
 /pAInter.egg-info/
 /venv/
+
+/src/environments/pylibmypaint.cpython-37m-x86_64-linux-gnu.so
