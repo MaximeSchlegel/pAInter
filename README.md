@@ -18,28 +18,30 @@ We reused the Libmypaint environment
 
 ## Installation
 
-* Clone the repository \
+* Clone the repository:
   ```shell
   git clone https://github.com/MaximeSchlegel/pAInter.git
   cd pAInter
   ```
     
-* Download the submodules \
+* Download the submodules:
   ```shell
   git submodule update --init --recursive
   ```
     
-* Install the required packages \
+* Install the required packages:
   ```shell
   apt-get install cmake pkg-config protobuf-compiler libjson-c-dev intltool libpython3-dev python3-pip
   ```
     
-* Install the python lib \
+* Install the python lib:
   ```shell
-  pip3 install six setuptools numpy tensorflow
+  pip3 install six setuptools numpy tensorflow dm-env
   ```
     
-* Launch the setup script \
+* Launch the setup script:
   ```shell
   python3 setup.py develop
   ```
+  
+  * Enjoy
