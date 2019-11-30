@@ -55,7 +55,7 @@ class CMakeBuildExt(build_ext):
 
     configure_cmd += [
         "-DCMAKE_BUILD_TYPE={}".format(cfg),
-        "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}/spiral/environments".format(
+        "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}/src/environments".format(
             cfg.upper(), extdir),
         "-DCMAKE_ARCHIVE_OUTPUT_DIRECTORY_{}={}".format(
             cfg.upper(), self.build_temp),

@@ -41,8 +41,8 @@ find_library(JSONC_LIBRARY NAMES json-c)
 set(Libmypaint_DEPS ${JSONC_LIBRARY})
 
 add_subdirectory(${PROJECT_SOURCE_DIR}/third_party/googletest)
-add_subdirectory(${PROJECT_SOURCE_DIR}/third_party/absl)
-add_subdirectory(${PROJECT_SOURCE_DIR}/third_party/glog)
+add_subdirectory(${PROJECT_SOURCE_DIR}/third_party/abseil)
+add_subdirectory(${PROJECT_SOURCE_DIR}/third_party/googlelog)
 
 #cmake.txt:1
 
