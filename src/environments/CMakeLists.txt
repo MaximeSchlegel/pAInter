@@ -26,14 +26,5 @@ target_include_directories(pylibmypaint PUBLIC ${PROJECT_SOURCE_DIR})
 target_include_directories(pylibmypaint PUBLIC ${Libmypaint_INCLUDE_DIRS})
 target_include_directories(pylibmypaint PUBLIC ${Python3_NumPy_INCLUDE_DIRS})
 target_link_libraries(
-    pylibmypaint PRIVATE
-    absl::memory glog::glog ${Libmypaint_LIBRARIES} ${Libmypaint_DEPS})
-
-#cmake.txt
-
-
-#add_custom_target(
-#    pyconfig
-#    ALL
-#    COMMAND ${CMAKE_COMMAND} -E copy ${PROTO_PY} ${PROJECT_SOURCE_DIR}/src/environments
-#    DEPENDS ${PROTO_PY})
+    pylibmypaint
+    PRIVATE absl::memory glog::glog ${Libmypaint_LIBRARIES} ${Libmypaint_DEPS})

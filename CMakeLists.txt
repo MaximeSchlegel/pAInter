@@ -44,8 +44,6 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/third_party/googletest)
 add_subdirectory(${PROJECT_SOURCE_DIR}/third_party/abseil)
 add_subdirectory(${PROJECT_SOURCE_DIR}/third_party/googlelog)
 
-#cmake.txt:1
-
 set(PYBIND11_PYTHON_VERSION ${Python3_VERSION})
 add_subdirectory(${PROJECT_SOURCE_DIR}/third_party/pybind11)
 
