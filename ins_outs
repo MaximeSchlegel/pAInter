@@ -1,0 +1,23 @@
+Generateur:
+    input:
+	(image_target-64x64x3, image_current-64x64x3)
+    output:
+	(x_start, y_start, x_control, y_control, x_end, y_end, brush_pressure, brush_size, r, g, b)
+
+Discriminateur:
+    input:
+    image_current-64x64x3
+    output:
+    [0;1]
+
+EnvInterface:
+    draw(generator_output):
+    ø
+    get_canvas:
+	image_current-64x64x3
+
+GifAnnimator
+    ?
+
+
+
