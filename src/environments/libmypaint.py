@@ -34,7 +34,7 @@ from src.environments import utils
 from src.environments import pylibmypaint
 
 
-nest = tf.contrib.framework.nest
+nest = tf.nest
 
 
 class BrushSettings(enum.IntEnum):

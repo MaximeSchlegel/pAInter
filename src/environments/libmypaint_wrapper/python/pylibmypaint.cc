@@ -22,7 +22,7 @@ namespace py = pybind11;
 #include "src/environments/libmypaint_wrapper/brush.h"
 #include "src/environments/libmypaint_wrapper/surface.h"
 
-namespace painter {
+namespace src {
 namespace libmypaint {
 
 PYBIND11_MODULE(pylibmypaint, m) {
@@ -64,4 +64,4 @@ PYBIND11_MODULE(pylibmypaint, m) {
 }
 
 }  // namespace libmypaint
-}  // namespace painter
+}  // namespace src

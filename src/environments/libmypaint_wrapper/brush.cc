@@ -20,7 +20,7 @@
 
 #include "glog/logging.h"
 
-namespace painter {
+namespace src {
 namespace libmypaint {
 
 BrushWrapper::BrushWrapper() : brush_(mypaint_brush_new()) {}
@@ -60,4 +60,4 @@ void BrushWrapper::StrokeTo(float x, float y, float pressure, float dtime) {
 }
 
 }  // namespace libmypaint
-}  // namespace painter
+}  // namespace src
