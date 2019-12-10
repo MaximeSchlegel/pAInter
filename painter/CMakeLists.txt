@@ -14,13 +14,11 @@
 
 # Libmypaint wrapper target.
 set(SOURCES
-    libmypaint_wrapper/python/pylibmypaint.cc
-    libmypaint_wrapper/brush.cc
-    libmypaint_wrapper/surface.cc)
+    environments/libmypaint_wrapper/python/pylibmypaint.cc
+    environments/libmypaint_wrapper/brush.cc
+    environments/libmypaint_wrapper/surface.cc)
 
 pybind11_add_module(pylibmypaint ${SOURCES})
-
-add_dependencies(pylibmypaint libmypaint)
 
 target_include_directories(pylibmypaint PUBLIC ${PROJECT_SOURCE_DIR})
 target_include_directories(pylibmypaint PUBLIC ${Libmypaint_INCLUDE_DIRS})

@@ -30,9 +30,8 @@ import tensorflow as tf
 from dm_env import specs
 from six.moves import xrange
 
-from src.environments import utils
-from src.environments import pylibmypaint
-
+from painter.environments import utils
+from painter.environments import pylibmypaint
 
 nest = tf.nest
 

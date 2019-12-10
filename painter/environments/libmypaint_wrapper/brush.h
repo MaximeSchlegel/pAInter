@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef SRC_ENVIRONMENTS_LIBMYPAINT_WRAPPER_BRUSH_H_
-#define SRC_ENVIRONMENTS_LIBMYPAINT_WRAPPER_BRUSH_H_
+#ifndef PAINTER_ENVIRONMENTS_LIBMYPAINT_WRAPPER_BRUSH_H_
+#define PAINTER_ENVIRONMENTS_LIBMYPAINT_WRAPPER_BRUSH_H_
 
 #include <memory>
 #include <string>
 
 #include "libmypaint/mypaint-brush.h"
-#include "src/environments/libmypaint_wrapper/surface.h"
+#include "painter/environments/libmypaint_wrapper/surface.h"
 
-namespace src {
+namespace painter {
 namespace libmypaint {
 
 class BrushWrapper {
@@ -48,6 +48,6 @@ class BrushWrapper {
 };
 
 }  // namespace libmypaint
-}  // namespace src
+}  // namespace painter
 
-#endif  // SRC_ENVIRONMENTS_LIBMYPAINT_WRAPPER_BRUSH_H_
+#endif  // PAINTER_ENVIRONMENTS_LIBMYPAINT_WRAPPER_BRUSH_H_

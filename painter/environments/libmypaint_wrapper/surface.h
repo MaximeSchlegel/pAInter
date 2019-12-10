@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef SRC_ENVIRONMENTS_LIBMYPAINT_WRAPPER_SURFACE_H_
-#define SRC_ENVIRONMENTS_LIBMYPAINT_WRAPPER_SURFACE_H_
+#ifndef PAINTER_ENVIRONMENTS_LIBMYPAINT_WRAPPER_SURFACE_H_
+#define PAINTER_ENVIRONMENTS_LIBMYPAINT_WRAPPER_SURFACE_H_
 
 #include <cstddef>
 #include <cstdint>
@@ -24,7 +24,7 @@
 #include "libmypaint/mypaint-glib-compat.h"
 #include "libmypaint/mypaint-tiled-surface.h"
 
-namespace src {
+namespace painter {
 namespace libmypaint {
 
 struct Surface : MyPaintTiledSurface {
@@ -71,6 +71,6 @@ class SurfaceWrapper {
 };
 
 }  // namespace libmypaint
-}  // namespace src
+}  // namespace painter
 
-#endif  // SRC_ENVIRONMENTS_LIBMYPAINT_WRAPPER_SURFACE_H_
+#endif  // PAINTER_ENVIRONMENTS_LIBMYPAINT_WRAPPER_SURFACE_H_

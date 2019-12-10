@@ -13,15 +13,12 @@
 # limitations under the License.
 
 cmake_minimum_required(VERSION 3.14)
-project(pAInter)
+project(painter)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
 
 find_package(Python3 REQUIRED COMPONENTS Interpreter Development NumPy)
 find_package(PythonInterp ${Python3_VERSION} REQUIRED)
-
-find_package(Protobuf REQUIRED)
-include_directories(${Protobuf_INCLUDE_DIRS})
 
 # Build libmypaint.
 include(ExternalProject)
@@ -47,4 +44,4 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/third_party/googlelog)
 set(PYBIND11_PYTHON_VERSION ${Python3_VERSION})
 add_subdirectory(${PROJECT_SOURCE_DIR}/third_party/pybind11)
 
-add_subdirectory(src/environments)
+add_subdirectory(painter)

@@ -55,7 +55,7 @@ class CMakeBuildExt(build_ext):
 
     configure_cmd += [
         "-DCMAKE_BUILD_TYPE={}".format(cfg),
-        "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}/src/environments".format(
+        "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}/painter/environments".format(
             cfg.upper(), extdir),
         "-DCMAKE_ARCHIVE_OUTPUT_DIRECTORY_{}={}".format(
             cfg.upper(), self.build_temp),
@@ -73,23 +73,23 @@ class CMakeBuildExt(build_ext):
                           cwd=self.build_temp)
 
 
-painter_extension = CMakeExtension("pAInter")
+painter_extension = CMakeExtension("painter")
 
 
 setup(
     name="pAInter",
     version="1.0",
-    packages=find_packages(include="src/environments"),
+    packages=find_packages(include="painter*"),
     python_requires=">=3.6",
     setup_requires=[],
     install_requires=[
         "dm-env",
         "numpy",
         "six",
-        "tensorflow"#>=1.14,<2",
-        # "tensorflow-hub",
-        # "dm-sonnet",#>=1.35,<2",
-        # "scipy",
+        "tensorflow>=1.14,<2",
+        "tensorflow-hub",
+        "dm-sonnet>=1.35,<2",
+        "scipy",
     ],
     ext_modules=[painter_extension],
     cmdclass={

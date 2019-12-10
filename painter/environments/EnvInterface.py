@@ -1,6 +1,6 @@
 import numpy as np
 
-from src.environments.libmypaint import LibMyPaint
+from painter.environments.libmypaint import LibMyPaint
 
 
 class EnvInterface:
@@ -49,6 +49,7 @@ class EnvInterface:
         b = self._map_to_int_interval(b,
                                       action_spec["blue"].minimum, action_spec["blue"].maximum)
 
+        print(self.grid_size, "\n")
         print(x_start, y_start, "\n")
         print(x_control, y_control, "\n")
         print(x_end, y_end, "\n")
@@ -56,9 +57,9 @@ class EnvInterface:
         if (x_start, y_start) != self.brush_position:
             # go to the strat of the curve
             move = {"control":  np.ravel_multi_index((x_start, y_start),
-                                                     (self.grid_size -1, self.grid_size -1)).astype("int32"),
+                                                     (self.grid_size - 1, self.grid_size - 1)).astype("int32"),
                     "end":      np.ravel_multi_index((x_start, y_start),
-                                                     (self.grid_size -1, self.grid_size -1)).astype("int32"),
+                                                     (self.grid_size - 1, self.grid_size - 1)).astype("int32"),
                     "flag":     np.int32(0),
                     "pressure": np.int32(brush_pressure),
                     "size":     np.int32(brush_size),
@@ -70,9 +71,9 @@ class EnvInterface:
 
         # draw the curve
         draw = {"control":  np.ravel_multi_index((x_control, y_control),
-                                                 (self.grid_size -1, self.grid_size -1)).astype("int32"),
+                                                 (self.grid_size - 1, self.grid_size - 1)).astype("int32"),
                 "end":      np.ravel_multi_index((x_end, y_end),
-                                                 (self.grid_size -1, self.grid_size -1)).astype("int32"),
+                                                 (self.grid_size - 1, self.grid_size - 1)).astype("int32"),
                 "flag":     np.int32(1),
                 "pressure": np.int32(brush_pressure),
                 "size":     np.int32(brush_size),
