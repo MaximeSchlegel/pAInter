@@ -453,7 +453,7 @@ class LibMyPaint(environment.Environment):
     self._surface.EndAtomic()
 
     # Handle termination of the episode.
-    reward = 0.0
+    reward = 0
     self._episode_step += 1
     if self._episode_step == self._episode_length:
       time_step = environment.termination(reward=reward,
@@ -464,6 +464,7 @@ class LibMyPaint(environment.Environment):
                                          discount=self._discount)
 
     self._prev_step_type = time_step.step_type
+
     return time_step
 
   def observation_spec(self):

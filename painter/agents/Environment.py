@@ -9,6 +9,9 @@ def map_to_int_interval(to_map, start, end):
     i = start + to_map * (end - start)
     return int(i)
 
+def distance_l2(matrix1, matrix2):
+    return np.linalg.norm(matrix1-matrix2)
+
 
 # Action space
 class ActionSpace(object):
@@ -31,7 +34,7 @@ class LibMyPaintEnvironment(object):
         """
 
         self.grid_size = 32  # size of the action grid
-        self.episode_length = 2 * episode_length  # nombre d'items d'action à prédire pour chaque action
+        self.episode_length = 2 * episode_length  # nombre d'action à prédire pour chaque episode
 
         env_settings = dict(
             episode_length=self.episode_length,                 # Number of frames in each episode.
@@ -48,6 +51,7 @@ class LibMyPaintEnvironment(object):
 
         self.env = LibMyPaint(**env_settings)
         self.state = self.env.reset()
+        self.actions = []  # TODO
 
         self.action_space = ActionSpace(self.episode_length)
 
@@ -61,8 +65,10 @@ class LibMyPaintEnvironment(object):
         Returns
         - observable : 3d numpy array of shape (height, width, channels) representing the new state of the environment
         """
-
+        # objectif -> l'image target ndarray hxlx3
         self.state = self.env.reset()
+        self.actions = []
+        self.objective = objective
         return self.getObservable()
 
     def getObservable(self):
@@ -89,6 +95,11 @@ class LibMyPaintEnvironment(object):
         - done : boolean indicating if new state is a terminal state
         - infos : dictionary of informations (for debugging purpose)
         """
+
+        if LibMyPaint.step_type.LAST == self.state["step_type"]:
+            return self.getObservable(), distance_l2(self.getObservable(), self.objective), True, {}
+
+        self.actions.append(action)
 
         action_spec = self.env.action_spec()
 
@@ -126,7 +137,6 @@ class LibMyPaintEnvironment(object):
                 "green": np.int32(g),
                 "blue": np.int32(b)}
         self.state = self.env.step(move)
-        self.brush_position = x_start, y_start
 
         # draw the curve
         draw = {"control": np.ravel_multi_index((x_control, y_control),
@@ -140,6 +150,10 @@ class LibMyPaintEnvironment(object):
                 "green": np.int32(g),
                 "blue": np.int32(b)}
         self.state = self.env.step(draw)
+
+        if LibMyPaint.step_type.LAST == self.state["step_type"]:
+            return self.getObservable(), distance_l2(self.getObservable(), self.objective), True, {}
+
         return self.getObservable(), 0, False, {}
 
     def close(self):
@@ -154,11 +168,11 @@ class LibMyPaintEnvironment(object):
         Returns
         - a render of the environment state, given in the requested mode
         """
-        if mode == "rgb_array":
+        if mode == "hight_res":
             ### compléter
             return self.getObservable()
         else:
-            pass
+            return self.getObservable()
 
 
 class SimpleSequentialReproductionInstantEnvironment(object):
