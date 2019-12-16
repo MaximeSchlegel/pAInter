@@ -5,3 +5,4 @@
 /src/agents/spiral/
 
 /src/environments/pylibmypaint.cpython-37m-x86_64-linux-gnu.so
+/painter/environments/pylibmypaint.cpython-37m-x86_64-linux-gnu.so
