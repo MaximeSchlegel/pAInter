@@ -329,7 +329,7 @@ class LibMyPaint(environment.Environment):
 
   def _move_to(self, y, x, update_brush_params=True):
     if update_brush_params:
-      self._update_brush_params(y=y, x=y, is_painting=False)
+      self._update_brush_params(y=y, x=x, is_painting=False)
     self._brush.Reset()
     self._brush.NewStroke()
     self._brush.StrokeTo(x, y, 0.0, self.DTIME)
