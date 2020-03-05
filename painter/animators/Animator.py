@@ -2,32 +2,27 @@ import imageio
 import numpy as np
 import math as m
 import matplotlib.pyplot as plt
-from PIL import image
+from PIL import Image
 
-from src.agents.impala_agent import Agent
-from src.environments.libmypaint import LibMyPaint
+from painter.agents.Agent import Agent
+from painter.environmentInterfaces.EnvironmentInterface import EnvironmentInterface
 
 
+########################################################################################################################
 class Animator:
-    def __init__(self, agent, environment):
+    def __init__(self, agent, environment_interface):
         assert isinstance(agent, Agent), "Agent is not of type agent"
-        assert isinstance(environment, LibMyPaint), "Environment is not of type LibMyPaint"
+        assert isinstance(environment_interface, EnvironmentInterface), "Environment is not of type LibMyPaint"
 
         self.agent = agent
-        self.environment = environment
+        self.envInterface = environment_interface
 
-    def anime(self, target, lenght, fps):
+    def anime(self, target, fps):
         # Initialize the agent
         # TODO: initialize the agent, get the first observation, take the first action
 
-        initial_state, step = agent_utils.get_module_wrappers(MODULE_PATH)
-        state = initial_state()
+        self.envInterface.reset(target)
 
-        time_step = self.environment.reset()
-
-        noise_sample = np.random.normal(size=(10,)).astype(np.float32)
-
-        actions = []
         for t in range(19):
             time_step.observation["noise_sample"] = noise_sample
             action, state = step(time_step.step_type, time_step.observation, state)
