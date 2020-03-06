@@ -10,6 +10,3 @@
 [submodule "third_party/googlelog"]
 	path = third_party/googlelog
 	url = https://github.com/google/glog
-[submodule "third_party/libmypaint_brushes"]
-	path = third_party/libmypaint_brushes
-	url = https://github.com/mypaint/mypaint-brushes.git

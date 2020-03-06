@@ -83,13 +83,13 @@ setup(
     python_requires=">=3.6",
     setup_requires=[],
     install_requires=[
-        "dm-env",
-        "numpy",
-        "six",
-        "tensorflow>=1.14,<2",
+        "tensorflow>=2",
         "tensorflow-hub",
-        "dm-sonnet>=1.35,<2",
+        "dm-env",
+        "dm-sonnet",
+        "six",
         "scipy",
+        "numpy",
     ],
     ext_modules=[painter_extension],
     cmdclass={
