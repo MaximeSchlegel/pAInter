@@ -5,5 +5,5 @@ class Agent:
     def initial_state(self):
         pass
 
-    def step(self):
+    def step(self, obs, target):
         pass
