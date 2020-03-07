@@ -19,7 +19,8 @@ class ActionSpace(object):
 class LibMyPaintInterface(EnvironmentInterface):
 
     def __init__(self, episode_length, grid_size=32, canvas_size=64):
-
+        super().__init__()
+        
         self.grid_size = grid_size  # size of the action grid
         self.episode_length = 2 * episode_length  # nombre d'action à prédire pour chaque episode
 
