@@ -32,8 +32,6 @@ def _fix15_to_rgba(buf):
     A `uint8` buffer with RGBA channels.
   """
   rgb, alpha = np.split(buf, [3], axis=2)
-  print(rgb.shape)
-  print(alpha.shape)
   rgb = rgb.astype(np.uint32)
   mask = alpha[:, 0] == 0
   rgb[mask] = 0
@@ -65,9 +63,6 @@ def _fix15_to_hsva(buf):
 
     rgb, alpha = np.split(buf, [3], axis=2)
     hsv = rgb_to_hsv_vectorized(rgb[..., ::-1].copy())
-    print(rgb.shape)
-    print(hsv.shape)
-    print(alpha.shape)
     return np.concatenate((hsv, alpha), axis=2)
 
 
