@@ -28,9 +28,11 @@ class ObservationSpace:
 # Interface between the agent and the environment
 class LibMyPaintInterface:
 
-    def __init__(self, type, episode_length, grid_size=32, canvas_size=64):
+    def __init__(self, episode_length, type="rgb", grid_size=32, canvas_size=64):
         self.grid_size = grid_size  # size of the action grid
         self.episode_length = 2 * episode_length  # nombre d'action à prédire pour chaque episode
+
+        print(type)
 
         env_settings = dict(
             episode_length=self.episode_length,                 # Number of frames in each episode.
@@ -45,16 +47,17 @@ class LibMyPaintInterface:
             background="white"                                  # Background could either be "white" or "transparent".
         )
 
-        if type == "rgb" or "grey":
+        if (type == "rgb") or\
+           (type == "grey"):
             self.env = LibMyPaint(**env_settings)
             self.color_1_name = "red"
             self.color_2_name = "green"
             self.color_3_name = "blue"
-        elif type == "hsv":
+        elif (type == "hsv"):
             self.env = LibMyPaint_hsv(**env_settings)
             self.color_1_name = "hue"
-            self.color_1_name = "saturation"
-            self.color_1_name = "value"
+            self.color_2_name = "saturation"
+            self.color_3_name = "value"
         else:
             raise ValueError("type must be 'grey', 'rgb' or 'hsv'")
 
