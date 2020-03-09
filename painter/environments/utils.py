@@ -65,6 +65,8 @@ def _fix15_to_hsva(buf):
 
     rgb, alpha = np.split(buf, [3], axis=2)
     hsv = rgb_to_hsv_vectorized(np.swapaxes(rgb, 0, 2))
+    print(hsv.shape)
+    print(alpha.shape)
     return np.concatenate((hsv, alpha), axis=2)
 
 
