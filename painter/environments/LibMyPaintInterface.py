@@ -32,8 +32,6 @@ class LibMyPaintInterface:
         self.grid_size = grid_size  # size of the action grid
         self.episode_length = 2 * episode_length  # nombre d'action à prédire pour chaque episode
 
-        print(type)
-
         env_settings = dict(
             episode_length=self.episode_length,                 # Number of frames in each episode.
             canvas_width=canvas_size,                           # The width of the canvas in pixels.
