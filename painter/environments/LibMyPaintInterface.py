@@ -44,9 +44,9 @@ class LibMyPaintInterface:
             background="white"                                  # Background could either be "white" or "transparent".
         )
 
-        if type == "rgb":
+        if type == "rgb" or "grey":
             self.env = LibMyPaint(**env_settings)
-        elif type == "hsv" or "grey":
+        elif type == "hsv":
             self.env = LibMyPaint_hsv(**env_settings)
         else:
             raise ValueError("type must be 'grey', 'rgb' or 'hsv'")
