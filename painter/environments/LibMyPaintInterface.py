@@ -117,7 +117,7 @@ class LibMyPaintInterface:
             return (self.getObservable(),
                     LibMyPaintInterface._distance_l2(self.state.observation["canvas"], self.target),
                     True,
-                    {})
+                    {"info": "To continue reset the environment"})
 
         self.actions.append(action)
 
@@ -182,7 +182,7 @@ class LibMyPaintInterface:
                 "blue": np.int32(b)}
         self.state = self.env.step(draw)
 
-        if LibMyPaint.step_type.LAST == self.state["step_type"]:
+        if self.state.step_type == environment.StepType.LAST:
             return (self.getObservable(),
                     LibMyPaintInterface._distance_l2(self.state.observation["canvas"], self.target),
                     True,
