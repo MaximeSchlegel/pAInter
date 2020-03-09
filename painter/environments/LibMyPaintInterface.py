@@ -158,9 +158,9 @@ class LibMyPaintInterface:
 
         # go to the start of the curve
         move = {"control": np.ravel_multi_index((x_start, y_start),
-                                                (self.grid_size - 1, self.grid_size - 1)).astype("int32"),
+                                                (self.grid_size, self.grid_size)).astype("int32"),
                 "end": np.ravel_multi_index((x_start, y_start),
-                                            (self.grid_size - 1, self.grid_size - 1)).astype("int32"),
+                                            (self.grid_size, self.grid_size)).astype("int32"),
                 "flag": np.int32(0),
                 "pressure": np.int32(brush_pressure),
                 "size": np.int32(brush_size),
@@ -171,9 +171,9 @@ class LibMyPaintInterface:
 
         # draw the curve
         draw = {"control": np.ravel_multi_index((x_control, y_control),
-                                                (self.grid_size - 1, self.grid_size - 1)).astype("int32"),
+                                                (self.grid_size, self.grid_size)).astype("int32"),
                 "end": np.ravel_multi_index((x_end, y_end),
-                                            (self.grid_size - 1, self.grid_size - 1)).astype("int32"),
+                                            (self.grid_size, self.grid_size)).astype("int32"),
                 "flag": np.int32(1),
                 "pressure": np.int32(brush_pressure),
                 "size": np.int32(brush_size),
