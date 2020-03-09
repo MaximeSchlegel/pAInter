@@ -42,7 +42,7 @@ def _fix15_to_rgba(buf):
 
 
 def _fix15_to_hsva(buf):
-    def rgb_to_hsv_vectorized(img):  # img with BGR format
+    def bgr_to_hsv_vectorized(img):  # img with BGR format
         maxc = img.max(-1)
         minc = img.min(-1)
 
@@ -50,7 +50,7 @@ def _fix15_to_hsva(buf):
         out[:, :, 2] = maxc
         out[:, :, 1] = (maxc - minc) / maxc
 
-        divs = (maxc[..., None] - img) / ((maxc - minc)[..., None])
+        divs = (maxc[..., None] - img) / ((maxc - minc)[..., None]) + 0.00000001
         cond1 = divs[..., 0] - divs[..., 1]
         cond2 = 2.0 + divs[..., 2] - divs[..., 0]
         h = 4.0 + divs[..., 1] - divs[..., 2]
@@ -62,11 +62,8 @@ def _fix15_to_hsva(buf):
         return out
 
     rgb, alpha = np.split(_fix15_to_rgba(buf), [3], axis=2)
-    print("RGB")
-    print(rgb)
-    hsv = rgb_to_hsv_vectorized((rgb[..., ::-1]).copy())
-    print("HSV")
-    print(hsv)
+    bgr = rgb[..., ::-1] / 255
+    hsv = bgr_to_hsv_vectorized(bgr)
     return np.concatenate((hsv, alpha), axis=2)
 
 
