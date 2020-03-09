@@ -92,7 +92,7 @@ class LibMyPaintInterface:
         - observable :  the current target and
                         3d numpy array of shape (height, width, channels) representing the new state of the environment
         """
-        assert self.target, "The target not define, to do so reset the environment"
+        assert self.target is not None, "The target not define, to do so reset the environment"
 
         return [self.target,
                 self.state.observation["canvas"]]
@@ -110,7 +110,7 @@ class LibMyPaintInterface:
         - infos : dictionary of informations (for debugging purpose)
         """
 
-        assert self.target, "The target not define, to do so reset the environment"
+        assert self.target is not None, "The target not define, to do so reset the environment"
 
         if LibMyPaint.step_type.LAST == self.state["step_type"]:
             return (self.getObservable(),
