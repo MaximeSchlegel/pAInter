@@ -10,8 +10,9 @@ from painter.environments.libmypaint import LibMyPaint
 # Action space
 class ActionSpace(object):
 
-    def __init__(self, n):
-        self.n = n
+    def __init__(self, observation_spec):
+        self.action_mask = observation_spec["action_mask"]
+        self.episode_length = observation_spec["episode_length"]
 
 
 ########################################################################################################################
@@ -44,7 +45,7 @@ class LibMyPaintInterface:
         )
 
         self.env = LibMyPaint(**env_settings)
-        self.action_space = ActionSpace(self.episode_length)
+        self.action_space = ActionSpace(self.env.observation_spec())
         self.observation_space = ObservationSpace(self.env.observation_spec())
 
         self.state = self.env.reset()
