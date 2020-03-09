@@ -1,3 +1,4 @@
+import dm_env as environment
 import numpy as np
 
 from PIL import Image
@@ -112,7 +113,7 @@ class LibMyPaintInterface:
 
         assert self.target is not None, "The target not define, to do so reset the environment"
 
-        if self.state.step_type == LibMyPaint.StepType.LAST:
+        if self.state.step_type == environment.StepType.LAST:
             return (self.getObservable(),
                     LibMyPaintInterface._distance_l2(self.state.observation["canvas"], self.target),
                     True,
