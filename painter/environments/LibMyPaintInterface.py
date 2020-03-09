@@ -150,17 +150,17 @@ class LibMyPaintInterface:
                                                               action_spec["size"].minimum,
                                                               action_spec["size"].maximum)
 
-        color_1 = LibMyPaintInterface._map_to_int_interval(r,
-                                                     action_spec[self.color_1_name].minimum,
-                                                     action_spec[self.color_2_name].maximum)
+        color_1 = LibMyPaintInterface._map_to_int_interval(color_1,
+                                                           action_spec[self.color_1_name].minimum,
+                                                           action_spec[self.color_2_name].maximum)
 
-        color_2 = LibMyPaintInterface._map_to_int_interval(g,
-                                                     action_spec[self.color_2_name].minimum,
-                                                     action_spec[self.color_2_name].maximum)
+        color_2 = LibMyPaintInterface._map_to_int_interval(color_2,
+                                                           action_spec[self.color_2_name].minimum,
+                                                           action_spec[self.color_2_name].maximum)
 
-        color_3 = LibMyPaintInterface._map_to_int_interval(b,
-                                                     action_spec[self.color_3_name].minimum,
-                                                     action_spec[self.color_3_name].maximum)
+        color_3 = LibMyPaintInterface._map_to_int_interval(color_3,
+                                                           action_spec[self.color_3_name].minimum,
+                                                           action_spec[self.color_3_name].maximum)
 
         # go to the start of the curve
         move = {"control": np.ravel_multi_index((x_start, y_start),
