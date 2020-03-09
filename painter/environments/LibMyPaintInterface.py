@@ -112,7 +112,7 @@ class LibMyPaintInterface:
 
         assert self.target is not None, "The target not define, to do so reset the environment"
 
-        if LibMyPaint.step_type.LAST == self.state["step_type"]:
+        if  self.state["step_type"] == LibMyPaint.StepType.LAST:
             return (self.getObservable(),
                     LibMyPaintInterface._distance_l2(self.state.observation["canvas"], self.objective),
                     True,
