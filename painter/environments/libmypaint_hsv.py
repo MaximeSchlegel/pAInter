@@ -232,7 +232,7 @@ class LibMyPaint_hsv(environment.Environment):
     buf = self._surface.BufferAsNumpy()
     buf = buf.transpose((0, 2, 1, 3, 4))
     buf = buf.reshape((self._canvas_width, self._canvas_width, 4))
-    canvas = np.single(utils._fix15_to_rgba(buf)) / 255.0
+    canvas = np.single(utils._fix15_to_hsva(buf)) / 255.0
     return canvas
 
   def observation(self):
