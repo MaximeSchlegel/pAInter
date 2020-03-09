@@ -24,7 +24,7 @@ class LibMyPaintInterface:
 
         env_settings = dict(
             episode_length=self.episode_length,                 # Number of frames in each episode.
-            canvas_width=canvas_size,                                    # The width of the canvas in pixels.
+            canvas_width=canvas_size,                           # The width of the canvas in pixels.
             grid_width=self.grid_size,                          # The width of the action grid.
             brushes_basedir="third_party/libmypaint_brushes/",  # The location of libmypaint brushes.
             brush_type="classic/dry_brush",                     # The type of the brush.
@@ -40,7 +40,7 @@ class LibMyPaintInterface:
         self.actions = []  # TODO
 
         self.action_space = ActionSpace(self.episode_length)
-        self.objective = None
+        self.target = None
 
     @staticmethod
     def _map_to_int_interval(to_map, start, end):
@@ -51,40 +51,40 @@ class LibMyPaintInterface:
     def _distance_l2(matrix1, matrix2):
         return np.linalg.norm(matrix1 - matrix2)
 
-    def reset(self, objective):
+    def reset(self, target):
         """
         Reinitializes the reinforcement learning environment
         
         Takes as inputs
-        - objective : 3d numpy array of shape (height, width, channels)
-        - n_actions : integer indicating how many components there are in one agent action
+        - target : 3d numpy array of shape (height, width, channels)
         Returns
         - observable : 3d numpy array of shape (height, width, channels) representing the new state of the environment
         """
-        # objectif -> l'image target ndarray hxlx3
         self.state = self.env.reset()
         self.actions = []
-        self.objective = objective
+        self.target = target
+
         return self.getObservable()
 
     def getObservable(self):
         """
         Returns the observable data of the environment
-        
-        Takes as inputs
-        - nothing
-        Returns
-        - observable : 3d numpy array of shape (height, width, channels) representing the new state of the environment
-        """
 
-        return self.state.observation["canvas"]
+        Returns
+        - observable :  the current target and
+                        3d numpy array of shape (height, width, channels) representing the new state of the environment
+        """
+        assert self.target, "The target not define, to do so reset the environment"
+
+        return [self.target,
+                self.state.observation["canvas"]]
 
     def step(self, action):
         """
         Updates the environment with the given action
         
         Takes as inputs
-        - action : dictionnary representing an action
+        - action : array of value € [0,1] representing an action
         Returns
         - observable : 3d numpy array of shape (height, width, channels) representing the new state of the environment
         - reward : reward given to the agent for the performed action
@@ -92,11 +92,11 @@ class LibMyPaintInterface:
         - infos : dictionary of informations (for debugging purpose)
         """
 
-        assert self.Objective, "Objective not define"
+        assert self.target, "The target not define, to do so reset the environment"
 
         if LibMyPaint.step_type.LAST == self.state["step_type"]:
             return (self.getObservable(),
-                    LibMyPaintInterface._distance_l2(self.getObservable(), self.objective),
+                    LibMyPaintInterface._distance_l2(self.state.observation["canvas"], self.objective),
                     True,
                     {})
 
@@ -105,7 +105,6 @@ class LibMyPaintInterface:
         action_spec = self.env.action_spec()
 
         # extract the values
-        # TODO
         x_start, y_start, x_control, y_control, x_end, y_end, brush_pressure, brush_size, r, g, b = action
 
         # map them to the right interval
@@ -166,7 +165,7 @@ class LibMyPaintInterface:
 
         if LibMyPaint.step_type.LAST == self.state["step_type"]:
             return (self.getObservable(),
-                    LibMyPaintInterface._distance_l2(self.getObservable(), self.objective),
+                    LibMyPaintInterface._distance_l2(self.state.observation["canvas"], self.objective),
                     True,
                     {})
 
@@ -183,7 +182,7 @@ class LibMyPaintInterface:
         Returns a graphic representation of the environment
         
         Takes as inputs
-        - mode : among ("rgb_array",)
+        - mode : ø
         Returns
         - a render of the environment state, given in the requested mode
         """
