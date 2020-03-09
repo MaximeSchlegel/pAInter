@@ -33,7 +33,7 @@ def _fix15_to_rgba(buf):
   """
   rgb, alpha = np.split(buf, [3], axis=2)
   rgb = rgb.astype(np.uint32)
-  mask = alpha[:, 0] == 0
+  mask = alpha[..., 0] == 0
   rgb[mask] = 0
   rgb[~mask] = ((rgb[~mask] << 15) + alpha[~mask] // 2) // alpha[~mask]
   rgba = np.concatenate((rgb, alpha), axis=2)
