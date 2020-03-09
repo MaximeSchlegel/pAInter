@@ -100,8 +100,8 @@ def _fix15_to_rgba(buf):
     A `uint8` buffer with RGBA channels.
   """
   rgb, alpha = np.split(buf, [3], axis=2)
-  print(rgb)
-  print(alpha)
+  print(rgb.shape)
+  print(alpha.shape)
   rgb = rgb.astype(np.uint32)
   mask = alpha[:, 0] == 0
   rgb[mask] = 0
