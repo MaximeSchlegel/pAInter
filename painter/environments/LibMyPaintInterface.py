@@ -47,8 +47,14 @@ class LibMyPaintInterface:
 
         if type == "rgb" or "grey":
             self.env = LibMyPaint(**env_settings)
+            self.color_1_name = "red"
+            self.color_2_name = "green"
+            self.color_3_name = "blue"
         elif type == "hsv":
             self.env = LibMyPaint_hsv(**env_settings)
+            self.color_1_name = "hue"
+            self.color_1_name = "saturation"
+            self.color_1_name = "value"
         else:
             raise ValueError("type must be 'grey', 'rgb' or 'hsv'")
 
@@ -124,7 +130,7 @@ class LibMyPaintInterface:
         action_spec = self.env.action_spec()
 
         # extract the values
-        x_start, y_start, x_control, y_control, x_end, y_end, brush_pressure, brush_size, r, g, b = action
+        x_start, y_start, x_control, y_control, x_end, y_end, brush_pressure, brush_size, color_1, color_2, color_3 = action
 
         # map them to the right interval
         x_start = LibMyPaintInterface._map_to_int_interval(x_start, 0, self.grid_size - 1)
@@ -144,17 +150,17 @@ class LibMyPaintInterface:
                                                               action_spec["size"].minimum,
                                                               action_spec["size"].maximum)
 
-        r = LibMyPaintInterface._map_to_int_interval(r,
-                                                     action_spec["red"].minimum,
-                                                     action_spec["red"].maximum)
+        color_1 = LibMyPaintInterface._map_to_int_interval(r,
+                                                     action_spec[self.color_1_name].minimum,
+                                                     action_spec[self.color_2_name].maximum)
 
-        g = LibMyPaintInterface._map_to_int_interval(g,
-                                                     action_spec["green"].minimum,
-                                                     action_spec["green"].maximum)
+        color_2 = LibMyPaintInterface._map_to_int_interval(g,
+                                                     action_spec[self.color_2_name].minimum,
+                                                     action_spec[self.color_2_name].maximum)
 
-        b = LibMyPaintInterface._map_to_int_interval(b,
-                                                     action_spec["blue"].minimum,
-                                                     action_spec["blue"].maximum)
+        color_3 = LibMyPaintInterface._map_to_int_interval(b,
+                                                     action_spec[self.color_3_name].minimum,
+                                                     action_spec[self.color_3_name].maximum)
 
         # go to the start of the curve
         move = {"control": np.ravel_multi_index((x_start, y_start),
@@ -164,9 +170,9 @@ class LibMyPaintInterface:
                 "flag": np.int32(0),
                 "pressure": np.int32(brush_pressure),
                 "size": np.int32(brush_size),
-                "red": np.int32(r),
-                "green": np.int32(g),
-                "blue": np.int32(b)}
+                self.color_1_name: np.int32(color_1),
+                self.color_2_name: np.int32(color_2),
+                self.color_3_name: np.int32(color_3)}
         self.state = self.env.step(move)
 
         # draw the curve
@@ -177,9 +183,9 @@ class LibMyPaintInterface:
                 "flag": np.int32(1),
                 "pressure": np.int32(brush_pressure),
                 "size": np.int32(brush_size),
-                "red": np.int32(r),
-                "green": np.int32(g),
-                "blue": np.int32(b)}
+                self.color_1_name: np.int32(color_1),
+                self.color_2_name: np.int32(color_2),
+                self.color_3_name: np.int32(color_3)}
         self.state = self.env.step(draw)
 
         if self.state.step_type == environment.StepType.LAST:
