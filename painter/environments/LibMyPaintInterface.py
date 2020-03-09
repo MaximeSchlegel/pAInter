@@ -3,6 +3,7 @@ import numpy as np
 from PIL import Image
 
 from painter.environments.libmypaint import LibMyPaint
+from painter.environments.libmypaint_hsv import LibMyPaint_hsv
 
 
 ########################################################################################################################
@@ -26,7 +27,7 @@ class ObservationSpace:
 # Interface between the agent and the environment
 class LibMyPaintInterface:
 
-    def __init__(self, episode_length, grid_size=32, canvas_size=64):
+    def __init__(self, type, episode_length, grid_size=32, canvas_size=64):
         self.grid_size = grid_size  # size of the action grid
         self.episode_length = 2 * episode_length  # nombre d'action à prédire pour chaque episode
 
@@ -37,13 +38,19 @@ class LibMyPaintInterface:
             brushes_basedir="third_party/libmypaint_brushes/",  # The location of libmypaint brushes.
             brush_type="classic/dry_brush",                     # The type of the brush.
             brush_sizes=[1, 2, 4, 8, 16],                       # The sizes of the brush to use.
-            use_color=True,                                     # Color or black & white output?
+            use_color=type != "grey",                                     # Color or black & white output?
             use_pressure=True,                                  # Use pressure parameter of the brush?
             use_alpha=False,                                    # Drop or keep the alpha channel of the canvas?
             background="white"                                  # Background could either be "white" or "transparent".
         )
 
-        self.env = LibMyPaint(**env_settings)
+        if type == "rgb":
+            self.env = LibMyPaint(**env_settings)
+        elif type == "hsv" or "grey":
+            self.env = LibMyPaint_hsv(**env_settings)
+        else:
+            raise ValueError("type must be 'grey', 'rgb' or 'hsv'")
+
         self.action_space = ActionSpace(self.env.observation_spec())
         self.observation_space = ObservationSpace(self.env.observation_spec())
 
@@ -56,7 +63,7 @@ class LibMyPaintInterface:
     @staticmethod
     def _map_to_int_interval(to_map, start, end):
         i = start + to_map * (end - start)
-        return int(i)
+        return int(round(i))
 
     @staticmethod
     def _distance_l2(matrix1, matrix2):
