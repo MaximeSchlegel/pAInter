@@ -194,7 +194,7 @@ class LibMyPaintInterface:
                 {})
 
     def close(self):
-        return
+        self.env.close()
 
     def render(self, mode):
         """
