@@ -9,6 +9,7 @@ class Random(Agent):
         pass
 
     def step(self, observation, target):
+        super().__init__()
         x_start, y_start = random.random(), random.random()
         x_control, y_control = random.random(), random.random()
         x_end, y_end = random.random(), random.random()

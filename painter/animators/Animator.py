@@ -2,14 +2,13 @@ import imageio
 from pygifsicle import optimize
 
 from painter.agents.Agent import Agent
-from painter.environmentInterfaces.EnvironmentInterface import EnvironmentInterface
-
+from painter.environments.LibMyPaintInterface import LibMyPaintInterface
 
 ########################################################################################################################
 class Animator:
     def __init__(self, agent, environment_interface, objectif):
         assert isinstance(agent, Agent), "Agent is not of type agent"
-        assert isinstance(environment_interface, EnvironmentInterface), "Environment is not of type LibMyPaint"
+        assert isinstance(environment_interface, LibMyPaintInterface), "Environment is not of type LibMyPaint"
 
         self.agent = agent
         self.envInterface = environment_interface
