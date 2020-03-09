@@ -88,52 +88,7 @@ class BrushSettings(enum.IntEnum):
    MYPAINT_BRUSH_SETTINGS_COUNT) = range(46)
 
 
-def _fix15_to_rgba(buf):
-  """Converts buffer from a 15-bit fixed-point representation into uint8 RGBA.
 
-  Taken verbatim from the C code for libmypaint.
-
-  Args:
-    buf: 15-bit fixed-point buffer represented in `uint16`.
-
-  Returns:
-    A `uint8` buffer with RGBA channels.
-  """
-  rgb, alpha = np.split(buf, [3], axis=2)
-  print(rgb.shape)
-  print(alpha.shape)
-  rgb = rgb.astype(np.uint32)
-  mask = alpha[:, 0] == 0
-  rgb[mask] = 0
-  rgb[~mask] = ((rgb[~mask] << 15) + alpha[~mask] // 2) // alpha[~mask]
-  rgba = np.concatenate((rgb, alpha), axis=2)
-  rgba = (255 * rgba + (1 << 15) // 2) // (1 << 15)
-  return rgba.astype(np.uint8)
-
-
-def _fix15_to_hsva(buf):
-    def rgb_to_hsv_vectorized(img):  # img with BGR format
-        maxc = img.max(-1)
-        minc = img.min(-1)
-
-        out = np.zeros(img.shape)
-        out[:, :, 2] = maxc
-        out[:, :, 1] = (maxc - minc) / maxc
-
-        divs = (maxc[..., None] - img) / ((maxc - minc)[..., None])
-        cond1 = divs[..., 0] - divs[..., 1]
-        cond2 = 2.0 + divs[..., 2] - divs[..., 0]
-        h = 4.0 + divs[..., 1] - divs[..., 2]
-        h[img[..., 2] == maxc] = cond1[img[..., 2] == maxc]
-        h[img[..., 1] == maxc] = cond2[img[..., 1] == maxc]
-        out[:, :, 0] = (h / 6.0) % 1.0
-
-        out[minc == maxc, :2] = 0
-        return out
-
-    rgb, alpha = np.split(buf, [3], axis=2)
-    hsv = rgb_to_hsv_vectorized(np.swapaxes(rgb, 0, 2))
-    return np.concatenate((hsv, alpha), axis=2)
 
 
 
@@ -277,7 +232,7 @@ class LibMyPaint_hsv(environment.Environment):
     buf = self._surface.BufferAsNumpy()
     buf = buf.transpose((0, 2, 1, 3, 4))
     buf = buf.reshape((self._canvas_width, self._canvas_width, 4))
-    canvas = np.single(_fix15_to_hsva(buf)) / 255.0
+    canvas = np.single(utils._fix15_to_hsva(buf)) / 255.0
     return canvas
 
   def observation(self):
