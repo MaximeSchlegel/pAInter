@@ -87,27 +87,6 @@ class BrushSettings(enum.IntEnum):
    MYPAINT_BRUSH_SETTINGS_COUNT) = range(46)
 
 
-def _fix15_to_rgba(buf):
-  """Converts buffer from a 15-bit fixed-point representation into uint8 RGBA.
-
-  Taken verbatim from the C code for libmypaint.
-
-  Args:
-    buf: 15-bit fixed-point buffer represented in `uint16`.
-
-  Returns:
-    A `uint8` buffer with RGBA channels.
-  """
-  rgb, alpha = np.split(buf, [3], axis=2)
-  rgb = rgb.astype(np.uint32)
-  mask = alpha[..., 0] == 0
-  rgb[mask] = 0
-  rgb[~mask] = ((rgb[~mask] << 15) + alpha[~mask] // 2) // alpha[~mask]
-  rgba = np.concatenate((rgb, alpha), axis=2)
-  rgba = (255 * rgba + (1 << 15) // 2) // (1 << 15)
-  return rgba.astype(np.uint8)
-
-
 class LibMyPaint(environment.Environment):
   """A painting environment wrapping libmypaint."""
 
