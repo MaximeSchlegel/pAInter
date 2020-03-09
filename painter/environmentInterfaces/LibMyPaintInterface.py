@@ -15,6 +15,14 @@ class ActionSpace(object):
 
 
 ########################################################################################################################
+# Oberservation space
+class ObservationSpace:
+
+    def __init__(self, observation_spec):
+        self.shape = observation_spec["canvas"].shape
+
+
+########################################################################################################################
 # Interface between the agent and the environment
 class LibMyPaintInterface:
 
@@ -36,11 +44,14 @@ class LibMyPaintInterface:
         )
 
         self.env = LibMyPaint(**env_settings)
+        self.action_space = ActionSpace(self.episode_length)
+        self.observation_space = ObservationSpace(self.env.observation_spec())
+
         self.state = self.env.reset()
+        self.target = None
+
         self.actions = []  # TODO
 
-        self.action_space = ActionSpace(self.episode_length)
-        self.target = None
 
     @staticmethod
     def _map_to_int_interval(to_map, start, end):
