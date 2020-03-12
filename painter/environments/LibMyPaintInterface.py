@@ -64,7 +64,7 @@ class LibMyPaintInterface:
         elif coord_type == "hilb":
             l = math.log(self.grid_size, 2)
             assert l - int(l) == 0 and l % 2 == 0, "the action grid size can't be converted to an hilbert curve"
-            self.hilbert_curve = HilbertCurve(p=l / 2, N=2)
+            self.hilbert_curve = HilbertCurve(l / 2, 2)
 
         self.action_space = ActionSpace(self.env.observation_spec())
         self.observation_space = ObservationSpace(self.env.observation_spec())
