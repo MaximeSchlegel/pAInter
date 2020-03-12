@@ -148,7 +148,7 @@ class LibMyPaintInterface:
             y_end = LibMyPaintInterface._map_to_int_interval(y_end, 0, self.grid_size - 1)
 
         elif self.coord_type == "hilb":
-            start, control, control, x_end, y_end, brush_pressure, brush_size, color_1, color_2, color_3 = action
+            start, control, end, brush_pressure, brush_size, color_1, color_2, color_3 = action
             # map the coordonates to the right interval
             start = LibMyPaintInterface._map_to_int_interval(start, 0, pow(self.grid_size, 2) - 1)
             control = LibMyPaintInterface._map_to_int_interval(control, 0, pow(self.grid_size, 2) - 1)
