@@ -63,8 +63,8 @@ class LibMyPaintInterface:
             raise ValueError("coord_type must be 'cart' or 'hilb'")
         elif coord_type == "hilb":
             l = math.log(self.grid_size, 2)
-            assert l - int(l) == 0 and l % 2 == 0, "the action grid size can't be converted to an hilbert curve"
-            self.hilbert_curve = HilbertCurve(l / 2, 2)
+            assert l - int(l) == 0, "the action grid size can't be converted to an hilbert curve"
+            self.hilbert_curve = HilbertCurve(p=int(l), n=2)
 
         self.action_space = ActionSpace(self.env.observation_spec())
         self.observation_space = ObservationSpace(self.env.observation_spec())
@@ -150,9 +150,9 @@ class LibMyPaintInterface:
         elif self.coord_type == "hilb":
             start, control, end, brush_pressure, brush_size, color_1, color_2, color_3 = action
             # map the coordonates to the right interval
-            start = int(LibMyPaintInterface._map_to_int_interval(start, 0, pow(self.grid_size, 2) - 1))
-            control = int(LibMyPaintInterface._map_to_int_interval(control, 0, pow(self.grid_size, 2) - 1))
-            end = int(LibMyPaintInterface._map_to_int_interval(end, 0, pow(self.grid_size, 2) - 1))
+            start = int(LibMyPaintInterface._map_to_int_interval(start, 0, pow(2, math.log(self.grid_size, 2) * 2) - 1))
+            control = int(LibMyPaintInterface._map_to_int_interval(control, 0, pow(2, math.log(self.grid_size, 2) * 2) - 1))
+            end = int(LibMyPaintInterface._map_to_int_interval(end, 0, pow(2, math.log(self.grid_size, 2) * 2) - 1))
             x_start, y_start = self.hilbert_curve.coordinates_from_distance(start)
             x_control, y_control = self.hilbert_curve.coordinates_from_distance(control)
             x_end, y_end = self.hilbert_curve.coordinates_from_distance(end)
