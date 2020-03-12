@@ -152,7 +152,7 @@ class LibMyPaintInterface:
             # map the coordonates to the right interval
             start = LibMyPaintInterface._map_to_int_interval(start, 0, pow(self.grid_size, 2) - 1)
             control = LibMyPaintInterface._map_to_int_interval(control, 0, pow(self.grid_size, 2) - 1)
-            end = LibMyPaintInterface._map_to_int_interval(x_end, 0, pow(self.grid_size, 2) - 1)
+            end = LibMyPaintInterface._map_to_int_interval(end, 0, pow(self.grid_size, 2) - 1)
             x_start, y_start = self.hilbert_curve.coordinates_from_distance(start)
             x_control, y_control = self.hilbert_curve.coordinates_from_distance(control)
             x_end, y_end = self.hilbert_curve.coordinates_from_distance(end)
