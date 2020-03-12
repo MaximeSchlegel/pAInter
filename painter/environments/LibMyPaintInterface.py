@@ -1,8 +1,10 @@
+import math
+
 import dm_env as environment
 import numpy as np
 
 from PIL import Image
-
+from hilbertcurve.hilbertcurve import HilbertCurve
 from painter.environments.libmypaint import LibMyPaint
 from painter.environments.libmypaint_hsv import LibMyPaint_hsv
 
@@ -28,36 +30,41 @@ class ObservationSpace:
 # Interface between the agent and the environment
 class LibMyPaintInterface:
 
-    def __init__(self, episode_length, type="rgb", grid_size=32, canvas_size=64):
+    def __init__(self, episode_length, color_type="rgb", coord_type="cart", grid_size=32, canvas_size=64):
         self.grid_size = grid_size  # size of the action grid
         self.episode_length = 2 * episode_length  # nombre d'action à prédire pour chaque episode
 
         env_settings = dict(
-            episode_length=self.episode_length,                 # Number of frames in each episode.
-            canvas_width=canvas_size,                           # The width of the canvas in pixels.
-            grid_width=self.grid_size,                          # The width of the action grid.
+            episode_length=self.episode_length,  # Number of frames in each episode.
+            canvas_width=canvas_size,  # The width of the canvas in pixels.
+            grid_width=self.grid_size,  # The width of the action grid.
             brushes_basedir="third_party/libmypaint_brushes/",  # The location of libmypaint brushes.
-            brush_type="classic/dry_brush",                     # The type of the brush.
-            brush_sizes=[1, 2, 4, 8, 16],                       # The sizes of the brush to use.
-            use_color=type != "grey",                                     # Color or black & white output?
-            use_pressure=True,                                  # Use pressure parameter of the brush?
-            use_alpha=False,                                    # Drop or keep the alpha channel of the canvas?
-            background="white"                                  # Background could either be "white" or "transparent".
+            brush_type="classic/dry_brush",  # The type of the brush.
+            brush_sizes=[1, 2, 4, 8, 16],  # The sizes of the brush to use.
+            use_color=color_type != "grey",  # Color or black & white output?
+            use_pressure=True,  # Use pressure parameter of the brush?
+            use_alpha=False,  # Drop or keep the alpha channel of the canvas?
+            background="white"  # Background could either be "white" or "transparent".
         )
 
-        if (type == "rgb") or\
-           (type == "grey"):
+        self.color_type = color_type
+        if (color_type == "rgb") or (color_type == "grey"):
             self.env = LibMyPaint(**env_settings)
-            self.color_1_name = "red"
-            self.color_2_name = "green"
-            self.color_3_name = "blue"
-        elif (type == "hsv"):
+            self.color_name = ["red", "green", "blue"]
+        elif color_type == "hsv":
             self.env = LibMyPaint_hsv(**env_settings)
-            self.color_1_name = "hue"
-            self.color_2_name = "saturation"
-            self.color_3_name = "value"
+            self.color_name = ["hue", "saturation", "value"]
         else:
-            raise ValueError("type must be 'grey', 'rgb' or 'hsv'")
+            raise ValueError("color_type must be 'grey', 'rgb' or 'hsv'")
+
+        self.coord_type = coord_type
+        if (coord_type != "cart" and
+                coord_type != "hilb"):
+            raise ValueError("coord_type must be 'cart' or 'hilb'")
+        elif coord_type == "hilb":
+            l = math.log(self.grid_size, 2)
+            assert l - int(l) == 0 and l % 2 == 0, "the action grid size can't be converted to an hilbert curve"
+            self.hilbert_curve = HilbertCurve(p=l / 2, N=2)
 
         self.action_space = ActionSpace(self.env.observation_spec())
         self.observation_space = ObservationSpace(self.env.observation_spec())
@@ -66,7 +73,6 @@ class LibMyPaintInterface:
         self.target = None
 
         self.actions = []  # TODO
-
 
     @staticmethod
     def _map_to_int_interval(to_map, start, end):
@@ -131,17 +137,25 @@ class LibMyPaintInterface:
         action_spec = self.env.action_spec()
 
         # extract the values
-        x_start, y_start, x_control, y_control, x_end, y_end, brush_pressure, brush_size, color_1, color_2, color_3 = action
+        if self.coord_type == "cart":
+            x_start, y_start, x_control, y_control, x_end, y_end, brush_pressure, brush_size, color_1, color_2, color_3 = action
+            # map the coordinates to the right interval
+            x_start = LibMyPaintInterface._map_to_int_interval(x_start, 0, self.grid_size - 1)
+            y_start = LibMyPaintInterface._map_to_int_interval(y_start, 0, self.grid_size - 1)
+            x_control = LibMyPaintInterface._map_to_int_interval(x_control, 0, self.grid_size - 1)
+            y_control = LibMyPaintInterface._map_to_int_interval(y_control, 0, self.grid_size - 1)
+            x_end = LibMyPaintInterface._map_to_int_interval(x_end, 0, self.grid_size - 1)
+            y_end = LibMyPaintInterface._map_to_int_interval(y_end, 0, self.grid_size - 1)
 
-        # map them to the right interval
-        x_start = LibMyPaintInterface._map_to_int_interval(x_start, 0, self.grid_size - 1)
-        y_start = LibMyPaintInterface._map_to_int_interval(y_start, 0, self.grid_size - 1)
-
-        x_control = LibMyPaintInterface._map_to_int_interval(x_control, 0, self.grid_size - 1)
-        y_control = LibMyPaintInterface._map_to_int_interval(y_control, 0, self.grid_size - 1)
-
-        x_end = LibMyPaintInterface._map_to_int_interval(x_end, 0, self.grid_size - 1)
-        y_end = LibMyPaintInterface._map_to_int_interval(y_end, 0, self.grid_size - 1)
+        elif self.coord_type == "hilb":
+            start, control, control, x_end, y_end, brush_pressure, brush_size, color_1, color_2, color_3 = action
+            # map the coordonates to the right interval
+            start = LibMyPaintInterface._map_to_int_interval(start, 0, pow(self.grid_size, 2) - 1)
+            control = LibMyPaintInterface._map_to_int_interval(control, 0, pow(self.grid_size, 2) - 1)
+            end = LibMyPaintInterface._map_to_int_interval(x_end, 0, pow(self.grid_size, 2) - 1)
+            x_start, y_start = self.hilbert_curve.coordinates_from_distance(start)
+            x_control, y_control = self.hilbert_curve.coordinates_from_distance(control)
+            x_end, y_end = self.hilbert_curve.coordinates_from_distance(end)
 
         brush_pressure = LibMyPaintInterface._map_to_int_interval(brush_pressure,
                                                                   action_spec["pressure"].minimum,
@@ -152,16 +166,16 @@ class LibMyPaintInterface:
                                                               action_spec["size"].maximum)
 
         color_1 = LibMyPaintInterface._map_to_int_interval(color_1,
-                                                           action_spec[self.color_1_name].minimum,
-                                                           action_spec[self.color_2_name].maximum)
+                                                           action_spec[self.color_name[0]].minimum,
+                                                           action_spec[self.color_name[1]].maximum)
 
         color_2 = LibMyPaintInterface._map_to_int_interval(color_2,
-                                                           action_spec[self.color_2_name].minimum,
-                                                           action_spec[self.color_2_name].maximum)
+                                                           action_spec[self.color_name[1]].minimum,
+                                                           action_spec[self.color_name[1]].maximum)
 
         color_3 = LibMyPaintInterface._map_to_int_interval(color_3,
-                                                           action_spec[self.color_3_name].minimum,
-                                                           action_spec[self.color_3_name].maximum)
+                                                           action_spec[self.color_name[2]].minimum,
+                                                           action_spec[self.color_name[2]].maximum)
 
         # go to the start of the curve
         move = {"control": np.ravel_multi_index((x_start, y_start),
@@ -171,9 +185,9 @@ class LibMyPaintInterface:
                 "flag": np.int32(0),
                 "pressure": np.int32(brush_pressure),
                 "size": np.int32(brush_size),
-                self.color_1_name: np.int32(color_1),
-                self.color_2_name: np.int32(color_2),
-                self.color_3_name: np.int32(color_3)}
+                self.color_name[0]: np.int32(color_1),
+                self.color_name[1]: np.int32(color_2),
+                self.color_name[2]: np.int32(color_3)}
         self.state = self.env.step(move)
 
         # draw the curve
@@ -184,9 +198,9 @@ class LibMyPaintInterface:
                 "flag": np.int32(1),
                 "pressure": np.int32(brush_pressure),
                 "size": np.int32(brush_size),
-                self.color_1_name: np.int32(color_1),
-                self.color_2_name: np.int32(color_2),
-                self.color_3_name: np.int32(color_3)}
+                self.color_name[0]: np.int32(color_1),
+                self.color_name[1]: np.int32(color_2),
+                self.color_name[2]: np.int32(color_3)}
         self.state = self.env.step(draw)
 
         if self.state.step_type == environment.StepType.LAST:
