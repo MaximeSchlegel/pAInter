@@ -150,9 +150,9 @@ class LibMyPaintInterface:
         elif self.coord_type == "hilb":
             start, control, end, brush_pressure, brush_size, color_1, color_2, color_3 = action
             # map the coordonates to the right interval
-            start = LibMyPaintInterface._map_to_int_interval(start, 0, pow(self.grid_size, 2) - 1)
-            control = LibMyPaintInterface._map_to_int_interval(control, 0, pow(self.grid_size, 2) - 1)
-            end = LibMyPaintInterface._map_to_int_interval(end, 0, pow(self.grid_size, 2) - 1)
+            start = int(LibMyPaintInterface._map_to_int_interval(start, 0, pow(self.grid_size, 2) - 1))
+            control = int(LibMyPaintInterface._map_to_int_interval(control, 0, pow(self.grid_size, 2) - 1))
+            end = int(LibMyPaintInterface._map_to_int_interval(end, 0, pow(self.grid_size, 2) - 1))
             x_start, y_start = self.hilbert_curve.coordinates_from_distance(start)
             x_control, y_control = self.hilbert_curve.coordinates_from_distance(control)
             x_end, y_end = self.hilbert_curve.coordinates_from_distance(end)
