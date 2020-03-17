@@ -27,7 +27,6 @@ class ObservationSpace:
         self.shape = tuple([2] + list(observation_spec["canvas"].shape))
 
 
-
 ########################################################################################################################
 # Interface between the agent and the environment
 class LibMyPaintInterface:
@@ -110,8 +109,8 @@ class LibMyPaintInterface:
         """
         assert self.target is not None, "The target not define, to do so reset the environment"
 
-        return [self.target,
-                self.state.observation["canvas"]]
+        return np.array([self.target,
+                self.state.observation["canvas"]])
 
     def step(self, action):
         """
