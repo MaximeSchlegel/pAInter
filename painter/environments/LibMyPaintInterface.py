@@ -47,7 +47,6 @@ class LibMyPaintInterface:
             background="white"  # Background could either be "white" or "transparent".
         )
 
-        self.observation_space = ObservationSpace(self.env.observation_spec())
         self.color_type = color_type
         if (color_type == "rgb") or (color_type == "grey"):
             self.env = LibMyPaint(**env_settings)
@@ -58,7 +57,9 @@ class LibMyPaintInterface:
         else:
             raise ValueError("color_type must be 'grey', 'rgb' or 'hsv'")
 
+        self.observation_space = ObservationSpace(self.env.observation_spec())
         self.action_space = ActionSpace(shape=11)
+
         self.coord_type = coord_type
         if (coord_type != "cart" and
                 coord_type != "hilb"):
