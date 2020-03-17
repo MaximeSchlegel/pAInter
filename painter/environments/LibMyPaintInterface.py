@@ -191,6 +191,12 @@ class LibMyPaintInterface:
                 self.color_name[2]: np.int32(color_3)}
         self.state = self.env.step(move)
 
+        if self.state.step_type == environment.StepType.LAST:
+            return (self.getObservable(),
+                    LibMyPaintInterface._distance_l2(self.state.observation["canvas"], self.target),
+                    True,
+                    {})
+
         # draw the curve
         draw = {"control": np.ravel_multi_index((x_control, y_control),
                                                 (self.grid_size, self.grid_size)).astype("int32"),
