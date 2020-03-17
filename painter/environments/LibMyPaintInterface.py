@@ -1,12 +1,13 @@
-import math
-
+import colorsys as cs
 import dm_env as environment
+import math as m
+import matplotlib.pyplot as plt
 import numpy as np
 
-from PIL import Image
 from hilbertcurve.hilbertcurve import HilbertCurve
 from painter.environments.libmypaint import LibMyPaint
 from painter.environments.libmypaint_hsv import LibMyPaint_hsv
+from PIL import Image
 
 
 ########################################################################################################################
@@ -62,7 +63,7 @@ class LibMyPaintInterface:
                 coord_type != "hilb"):
             raise ValueError("coord_type must be 'cart' or 'hilb'")
         elif coord_type == "hilb":
-            l = math.log(self.grid_size, 2)
+            l = m.log(self.grid_size, 2)
             assert l - int(l) == 0, "the action grid size can't be converted to an hilbert curve"
             self.hilbert_curve = HilbertCurve(p=int(l), n=2)
 
@@ -150,9 +151,9 @@ class LibMyPaintInterface:
         elif self.coord_type == "hilb":
             start, control, end, brush_pressure, brush_size, color_1, color_2, color_3 = action
             # map the coordonates to the right interval
-            start = int(LibMyPaintInterface._map_to_int_interval(start, 0, pow(2, math.log(self.grid_size, 2) * 2) - 1))
-            control = int(LibMyPaintInterface._map_to_int_interval(control, 0, pow(2, math.log(self.grid_size, 2) * 2) - 1))
-            end = int(LibMyPaintInterface._map_to_int_interval(end, 0, pow(2, math.log(self.grid_size, 2) * 2) - 1))
+            start = int(LibMyPaintInterface._map_to_int_interval(start, 0, pow(2, m.log(self.grid_size, 2) * 2) - 1))
+            control = int(LibMyPaintInterface._map_to_int_interval(control, 0, pow(2, m.log(self.grid_size, 2) * 2) - 1))
+            end = int(LibMyPaintInterface._map_to_int_interval(end, 0, pow(2, m.log(self.grid_size, 2) * 2) - 1))
             x_start, y_start = self.hilbert_curve.coordinates_from_distance(start)
             x_control, y_control = self.hilbert_curve.coordinates_from_distance(control)
             x_end, y_end = self.hilbert_curve.coordinates_from_distance(end)
@@ -217,7 +218,7 @@ class LibMyPaintInterface:
     def close(self):
         self.env.close()
 
-    def render(self, mode):
+    def render(self, mode=None):
         """
         Returns a graphic representation of the environment
         
@@ -226,5 +227,11 @@ class LibMyPaintInterface:
         Returns
         - a render of the environment state, given in the requested mode
         """
-
-        return Image.fromarray(self.getObservable())
+        img = self.getObservable()[1]
+        if self.color_type == "hsv":
+            img = np.array([[cs.hsv_to_rgb(img[i, j][0],
+                                    img[i, j][1],
+                                    img[i, j][2]) for j in range(64)] for i in range(64)])
+        plt.imshow(img)
+        plt.show()
+        return Image.fromarray(self.getObservable()[1])
