@@ -234,4 +234,4 @@ class LibMyPaintInterface:
                                     img[i, j][2]) for j in range(64)] for i in range(64)])
         plt.imshow(img)
         plt.show()
-        return Image.fromarray(self.getObservable()[1])
+        return img
