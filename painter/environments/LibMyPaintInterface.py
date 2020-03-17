@@ -14,9 +14,8 @@ from PIL import Image
 # Action space
 class ActionSpace(object):
 
-    def __init__(self, observation_spec):
-        self.action_mask = observation_spec["action_mask"]
-        self.episode_length = observation_spec["episode_length"]
+    def __init__(self, shape):
+        self.shape = shape
 
 
 ########################################################################################################################
@@ -48,6 +47,7 @@ class LibMyPaintInterface:
             background="white"  # Background could either be "white" or "transparent".
         )
 
+        self.observation_space = ObservationSpace(self.env.observation_spec())
         self.color_type = color_type
         if (color_type == "rgb") or (color_type == "grey"):
             self.env = LibMyPaint(**env_settings)
@@ -58,6 +58,7 @@ class LibMyPaintInterface:
         else:
             raise ValueError("color_type must be 'grey', 'rgb' or 'hsv'")
 
+        self.action_space = ActionSpace(shape=11)
         self.coord_type = coord_type
         if (coord_type != "cart" and
                 coord_type != "hilb"):
@@ -66,9 +67,7 @@ class LibMyPaintInterface:
             l = m.log(self.grid_size, 2)
             assert l - int(l) == 0, "the action grid size can't be converted to an hilbert curve"
             self.hilbert_curve = HilbertCurve(p=int(l), n=2)
-
-        self.action_space = ActionSpace(self.env.observation_spec())
-        self.observation_space = ObservationSpace(self.env.observation_spec())
+            self.action_space = ActionSpace(shape=8)
 
         self.state = self.env.reset()
         self.target = None
