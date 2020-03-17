@@ -23,7 +23,7 @@ class ActionSpace(object):
 class ObservationSpace:
 
     def __init__(self, observation_spec):
-        self.shape = tuple([2] + list(observation_spec["canvas"].shape))
+        self.shape = (2,) + observation_spec["canvas"].shape
 
 
 ########################################################################################################################
