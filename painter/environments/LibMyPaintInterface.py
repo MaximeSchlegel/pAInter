@@ -247,4 +247,4 @@ class LibMyPaintInterface:
                 if modes == "display":
                     plt.imshow(img)
                     plt.show()
-        return img.astype("uint8")
+        return (img / 255).astype("uint8")
