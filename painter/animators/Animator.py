@@ -23,7 +23,7 @@ class Animator:
 
         # Play until the sequence has ended
         while not ended:
-            action = self.agent.step(obs)
+            action = self.agent.decision(obs)
             obs, score, ended, info = self.envInterface.step(action)
             img = self.envInterface.render()
             writer.append_data(img)
