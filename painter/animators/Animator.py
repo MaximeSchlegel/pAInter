@@ -17,6 +17,10 @@ class Animator:
         obs, ended = self.envInterface.reset(target), False
         path = pathlib.Path.joinpath(self.out_path,
                                      str(hash(self.agent.agent_name)) + ".gif").as_posix()
+        i = 1
+        while pathlib.Path(path).exists():
+            path = pathlib.Path.joinpath(self.out_path,
+                                         str(hash(self.agent.agent_name + str(i))) + ".gif").as_posix()
         writer = imageio.get_writer(path,
                                     mode='I',
                                     fps=fps)
