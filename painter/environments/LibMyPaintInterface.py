@@ -234,6 +234,8 @@ class LibMyPaintInterface:
         - a render of the environment state, given in the requested mode
         """
         img = self.getObservable()[1]
+        if self.color_type == "rgb":
+            img = img / 255
         if self.color_type == "hsv":
             img = np.array([[cs.hsv_to_rgb(img[i, j][0],
                                            img[i, j][1],
@@ -247,4 +249,4 @@ class LibMyPaintInterface:
                 if modes == "display":
                     plt.imshow(img)
                     plt.show()
-        return (img / 255).astype("uint8")
+        return img.astype("uint8")
