@@ -236,8 +236,8 @@ class LibMyPaintInterface:
         img = self.getObservable()[1]
         if self.color_type == "hsv":
             img = np.array([[cs.hsv_to_rgb(img[i, j][0],
-                                            img[i, j][1],
-                                            img[i, j][2]) for j in range(64)] for i in range(64)])
+                                           img[i, j][1],
+                                           img[i, j][2]) for j in range(64)] for i in range(64)])
         if modes is not None:
             if "dislay" in modes:
                 plt.imshow(img)
