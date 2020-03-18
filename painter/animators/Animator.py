@@ -1,5 +1,6 @@
 import imageio
 import pathlib
+import random
 
 from pygifsicle import optimize
 
@@ -14,7 +15,8 @@ class Animator:
     def anime(self, target, fps):
         # Initialize the environment
         obs, ended = self.envInterface.reset(target), False
-        path = pathlib.Path.joinpath(self.out_path, str(hash(self.agent.agent_name)) + ".gif").as_posix()
+        path = pathlib.Path.joinpath(self.out_path,
+                                     str(hash(self.agent.agent_name + random.randint(0, 1000))) + ".gif").as_posix()
         writer = imageio.get_writer(path,
                                     mode='I',
                                     fps=fps)
