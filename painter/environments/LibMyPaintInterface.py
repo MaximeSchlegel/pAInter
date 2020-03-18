@@ -238,8 +238,13 @@ class LibMyPaintInterface:
             img = np.array([[cs.hsv_to_rgb(img[i, j][0],
                                            img[i, j][1],
                                            img[i, j][2]) for j in range(64)] for i in range(64)])
-        if modes is not None:
-            if "dislay" in modes:
-                plt.imshow(img)
-                plt.show()
+        if modes:
+            if isinstance(modes, list) or isinstance(modes, tuple):
+                if "display" in modes:
+                    plt.imshow(img)
+                    plt.show()
+            else:
+                if modes == "display":
+                    plt.imshow(img)
+                    plt.show()
         return img
