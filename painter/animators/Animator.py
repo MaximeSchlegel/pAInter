@@ -14,11 +14,11 @@ class Animator:
     def anime(self, target, fps):
         # Initialize the environment
         obs, ended = self.envInterface.reset(target), False
-        writer = imageio.get_writer(pathlib.Path.joinpath(self.out_path, str(hash(self.agent.agent_name)) + ".gif"),
+        writer = imageio.get_writer(pathlib.Path.joinpath(self.out_path, str(hash(self.agent.agent_name)) + ".gif").as_posix(),
                                     mode='I',
                                     fps=fps)
 
-        print("output path: " + pathlib.Path.joinpath(self.out_path, str(hash(self.agent.agent_name)) + ".gif"))
+        print("output path: " + pathlib.Path.joinpath(self.out_path, str(hash(self.agent.agent_name)) + ".gif").as_posix())
 
         # Add the white canvas
         img = self.envInterface.render()
@@ -30,4 +30,4 @@ class Animator:
             obs, score, ended, info = self.envInterface.step(action)
             img = self.envInterface.render()
             writer.append_data(img)
-        optimize(pathlib.Path.joinpath(self.out_path, str(hash(self.agent.agent_name)) + ".gif"))
+        optimize(pathlib.Path.joinpath(self.out_path, str(hash(self.agent.agent_name)) + ".gif").as_posix())
