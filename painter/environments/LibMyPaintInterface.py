@@ -224,7 +224,7 @@ class LibMyPaintInterface:
     def close(self):
         self.env.close()
 
-    def render(self, mode=None):
+    def render(self, modes=None):
         """
         Returns a graphic representation of the environment
         
@@ -236,8 +236,9 @@ class LibMyPaintInterface:
         img = self.getObservable()[1]
         if self.color_type == "hsv":
             img = np.array([[cs.hsv_to_rgb(img[i, j][0],
-                                    img[i, j][1],
-                                    img[i, j][2]) for j in range(64)] for i in range(64)])
-        plt.imshow(img)
-        plt.show()
+                                            img[i, j][1],
+                                            img[i, j][2]) for j in range(64)] for i in range(64)])
+        if "dislay" in modes:
+            plt.imshow(img)
+            plt.show()
         return img
