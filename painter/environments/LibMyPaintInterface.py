@@ -30,7 +30,7 @@ class ObservationSpace:
 # Interface between the agent and the environment
 class LibMyPaintInterface:
 
-    def __init__(self, episode_length, color_type="rgb", coord_type="cart", grid_size=32, canvas_size=64):
+    def __init__(self, episode_length, color_type="rgb", coord_type="cart", grid_size=32, canvas_size=64, background="white"):
         self.grid_size = grid_size  # size of the action grid
         self.episode_length = 2 * episode_length  # nombre d'action à prédire pour chaque episode
 
@@ -44,7 +44,7 @@ class LibMyPaintInterface:
             use_color=color_type != "grey",  # Color or black & white output?
             use_pressure=True,  # Use pressure parameter of the brush?
             use_alpha=False,  # Drop or keep the alpha channel of the canvas?
-            background="white"  # Background could either be "white" or "transparent".
+            background=background  # Background could either be "white" or "transparent".
         )
 
         self.color_type = color_type
