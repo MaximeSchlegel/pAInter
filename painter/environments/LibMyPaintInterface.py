@@ -35,7 +35,7 @@ class LibMyPaintInterface:
         self.episode_length = 2 * episode_length  # nombre d'action à prédire pour chaque episode
 
         env_settings = dict(
-            episode_length=self.episode_length,  # Number of frames in each episode.
+            episode_length=self.episode_length + 1,  # Number of frames in each episode.
             canvas_width=canvas_size,  # The width of the canvas in pixels.
             grid_width=self.grid_size,  # The width of the action grid.
             brushes_basedir="third_party/libmypaint_brushes/",  # The location of libmypaint brushes.
@@ -129,7 +129,7 @@ class LibMyPaintInterface:
 
         if self.state.step_type == environment.StepType.LAST:
             return (self.getObservable(),
-                    LibMyPaintInterface._distance_l2(self.state.observation["canvas"], self.target),
+                    1 / LibMyPaintInterface._distance_l2(self.state.observation["canvas"], self.target),
                     True,
                     {"info": "To continue reset the environment"})
 
@@ -193,7 +193,7 @@ class LibMyPaintInterface:
 
         if self.state.step_type == environment.StepType.LAST:
             return (self.getObservable(),
-                    LibMyPaintInterface._distance_l2(self.state.observation["canvas"], self.target),
+                    1 / LibMyPaintInterface._distance_l2(self.state.observation["canvas"], self.target),
                     True,
                     {})
 
@@ -212,7 +212,7 @@ class LibMyPaintInterface:
 
         if self.state.step_type == environment.StepType.LAST:
             return (self.getObservable(),
-                    LibMyPaintInterface._distance_l2(self.state.observation["canvas"], self.target),
+                    1 / LibMyPaintInterface._distance_l2(self.state.observation["canvas"], self.target),
                     True,
                     {})
 

@@ -21,6 +21,8 @@ class Animator:
         while pathlib.Path(path).exists():
             path = pathlib.Path.joinpath(self.out_path,
                                          str(hash(self.agent.agent_name + str(i))) + ".gif").as_posix()
+            i += 1
+        
         writer = imageio.get_writer(path,
                                     mode='I',
                                     fps=fps)
