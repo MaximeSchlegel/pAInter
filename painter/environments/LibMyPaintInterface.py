@@ -59,6 +59,7 @@ class LibMyPaintInterface:
 
         self.observation_space = ObservationSpace(self.env.observation_spec())
         self.action_space = ActionSpace(shape=11)
+        self.max_norm = self._distance_l2(np.ones(self.observation_space.shape), np.zeros(self.observation_space.shape))
 
         self.coord_type = coord_type
         if (coord_type != "cart" and
@@ -129,7 +130,7 @@ class LibMyPaintInterface:
 
         if self.state.step_type == environment.StepType.LAST:
             return (self.getObservable(),
-                    - LibMyPaintInterface._distance_l2(self.state.observation["canvas"], self.target),
+                    1 / (LibMyPaintInterface._distance_l2(self.state.observation["canvas"], self.target) + 1e9 / self.max_norm),
                     True,
                     {"info": "To continue reset the environment"})
 
@@ -193,7 +194,7 @@ class LibMyPaintInterface:
 
         if self.state.step_type == environment.StepType.LAST:
             return (self.getObservable(),
-                    - LibMyPaintInterface._distance_l2(self.state.observation["canvas"], self.target),
+                    1 / (LibMyPaintInterface._distance_l2(self.state.observation["canvas"], self.target) + 1e9 / self.max_norm),
                     True,
                     {})
 
@@ -212,7 +213,7 @@ class LibMyPaintInterface:
 
         if self.state.step_type == environment.StepType.LAST:
             return (self.getObservable(),
-                    - LibMyPaintInterface._distance_l2(self.state.observation["canvas"], self.target),
+                    1 / (LibMyPaintInterface._distance_l2(self.state.observation["canvas"], self.target) + 1e9 / self.max_norm),
                     True,
                     {})
 
