@@ -89,7 +89,7 @@ class LibMyPaintInterface:
         Reinitializes the reinforcement learning environment
         
         Takes as inputs
-        - target : 3d numpy array of shape (height, width, channels)
+        - target : 3d numpy array of shape (height, width, channels) values must be in [0,1]
         Returns
         - observable : 3d numpy array of shape (height, width, channels) representing the new state of the environment
         """
@@ -110,7 +110,7 @@ class LibMyPaintInterface:
         assert self.target is not None, "The target not define, to do so reset the environment"
 
         return np.array([self.target,
-                self.state.observation["canvas"]])
+                         self.state.observation["canvas"]])
 
     def step(self, action):
         """
@@ -241,10 +241,10 @@ class LibMyPaintInterface:
         if modes:
             if isinstance(modes, list) or isinstance(modes, tuple):
                 if "display" in modes:
-                    plt.imshow(img)
+                    plt.imshow(img * 255)
                     plt.show()
             else:
                 if modes == "display":
-                    plt.imshow(img)
+                    plt.imshow(img * 255)
                     plt.show()
         return (img * 255).astype("uint8")
