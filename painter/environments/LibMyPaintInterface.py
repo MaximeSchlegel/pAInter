@@ -130,7 +130,7 @@ class LibMyPaintInterface:
 
         if self.state.step_type == environment.StepType.LAST:
             return (self.getObservable(),
-                    1 / (LibMyPaintInterface._distance_l2(self.state.observation["canvas"], self.target) + 1e9 / self.max_norm),
+                    1 / ((LibMyPaintInterface._distance_l2(self.state.observation["canvas"], self.target) + 1e-9) / self.max_norm),
                     True,
                     {"info": "To continue reset the environment"})
 
@@ -194,7 +194,7 @@ class LibMyPaintInterface:
 
         if self.state.step_type == environment.StepType.LAST:
             return (self.getObservable(),
-                    1 / (LibMyPaintInterface._distance_l2(self.state.observation["canvas"], self.target) + 1e9 / self.max_norm),
+                    1 / ((LibMyPaintInterface._distance_l2(self.state.observation["canvas"], self.target) + 1e-9) / self.max_norm),
                     True,
                     {})
 
@@ -213,7 +213,7 @@ class LibMyPaintInterface:
 
         if self.state.step_type == environment.StepType.LAST:
             return (self.getObservable(),
-                    1 / (LibMyPaintInterface._distance_l2(self.state.observation["canvas"], self.target) + 1e9 / self.max_norm),
+                    1 / ((LibMyPaintInterface._distance_l2(self.state.observation["canvas"], self.target) + 1e-9) / self.max_norm),
                     True,
                     {})
 
